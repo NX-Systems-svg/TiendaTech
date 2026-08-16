@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { PackageSearch } from "lucide-react";
 import { Section, SectionHeading } from "@/components/ui/Section";
@@ -5,6 +7,7 @@ import { Container } from "@/components/ui/Container";
 import { Card, Badge } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { products } from "@/lib/data";
+import { useCart } from "@/lib/cart-context";
 
 const currencyFormatter = new Intl.NumberFormat("es-MX", {
   style: "currency",
@@ -13,6 +16,8 @@ const currencyFormatter = new Intl.NumberFormat("es-MX", {
 });
 
 export function ProductCatalog() {
+  const { add } = useCart();
+
   return (
     <Section id="productos" className="border-t border-ink-800/80 bg-ink-900/40">
       <Container>
@@ -52,7 +57,13 @@ export function ProductCatalog() {
                     {currencyFormatter.format(product.priceFrom)}
                   </span>
                 </p>
-                <div className="mt-auto pt-2">
+                <div className="mt-auto flex flex-col gap-2 pt-2">
+                  <Button
+                    onClick={() => add(product.slug)}
+                    className="w-full !py-2.5 text-sm"
+                  >
+                    Agregar al carrito
+                  </Button>
                   <Button
                     href={`#contacto?producto=${encodeURIComponent(product.name)}`}
                     variant="secondary"
