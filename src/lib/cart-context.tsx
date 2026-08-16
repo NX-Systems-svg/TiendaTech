@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { products } from "@/lib/data";
 
 export type CartItem = {
@@ -85,7 +85,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prev) => prev.map((item) => (item.slug === slug ? { ...item, qty } : item)));
   };
 
-  const clear = () => setItems([]);
+  const clear = useCallback(() => setItems([]), []);
 
   const itemCount = useMemo(() => items.reduce((sum, item) => sum + item.qty, 0), [items]);
 
