@@ -7,14 +7,17 @@ import { Button } from "@/components/ui/Button";
 import { useCart } from "@/lib/cart-context";
 
 export default function CheckoutExitoPage() {
-  const { clear } = useCart();
+  const { clear, hydrated } = useCart();
 
   useEffect(() => {
-    clear();
-    // Se ejecuta una sola vez al montar: vaciar el carrito tras un pago
-    // exitoso no debe repetirse si `clear` se re-crea entre renders.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (hydrated) {
+      clear();
+    }
+    // Se espera a que el carrito complete su hidratación desde localStorage
+    // antes de vaciarlo. Sin esto, el efecto de hidratación del CartProvider
+    // (que corre después del efecto del componente hijo en montaje) sobrescribiría
+    // el carrito vaciado con los ítems almacenados.
+  }, [hydrated, clear]);
 
   return (
     <Container className="flex min-h-[60vh] flex-col items-center justify-center gap-4 py-24 text-center">
