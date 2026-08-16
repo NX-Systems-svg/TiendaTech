@@ -35,7 +35,8 @@ function readStoredCart(): CartItem[] {
         item !== null &&
         typeof (item as CartItem).slug === "string" &&
         typeof (item as CartItem).qty === "number" &&
-        (item as CartItem).qty > 0,
+        (item as CartItem).qty > 0 &&
+        products.some((p) => p.slug === (item as CartItem).slug),
     );
   } catch {
     return [];
@@ -47,6 +48,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    // SSR-safe localStorage hydration can only happen post-mount; the cascading
+    // render this triggers is intentional and bounded (fires once on mount).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setItems(readStoredCart());
     setHydrated(true);
   }, []);

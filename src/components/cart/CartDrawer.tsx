@@ -106,7 +106,8 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
                         type="button"
                         onClick={() => updateQty(item.slug, item.qty + 1)}
                         aria-label="Aumentar cantidad"
-                        className="rounded-full border border-ink-600 p-1 hover:border-brand-500"
+                        disabled={item.qty >= 20}
+                        className="rounded-full border border-ink-600 p-1 hover:border-brand-500 disabled:pointer-events-none disabled:opacity-50"
                       >
                         <Plus className="h-3.5 w-3.5" />
                       </button>
