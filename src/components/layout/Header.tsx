@@ -8,9 +8,12 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { navLinks } from "@/lib/data";
 import { siteConfig } from "@/lib/site-config";
+import { CartButton } from "@/components/cart/CartButton";
+import { CartDrawer } from "@/components/cart/CartDrawer";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const whatsappHref = `https://wa.me/52${siteConfig.contact.whatsapp}`;
 
   return (
@@ -48,15 +51,18 @@ export function Header() {
           </Button>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          className="inline-flex items-center justify-center rounded-full border border-ink-700 p-2.5 text-mist-100 transition-colors duration-200 hover:border-brand-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400 md:hidden"
-          aria-expanded={open}
-          aria-label={open ? "Cerrar menú" : "Abrir menú"}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <CartButton onClick={() => setCartOpen(true)} />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="inline-flex items-center justify-center rounded-full border border-ink-700 p-2.5 text-mist-100 transition-colors duration-200 hover:border-brand-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400 md:hidden"
+            aria-expanded={open}
+            aria-label={open ? "Cerrar menú" : "Abrir menú"}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </Container>
 
       {open ? (
@@ -78,6 +84,7 @@ export function Header() {
           </Container>
         </div>
       ) : null}
+      <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
     </header>
   );
 }
