@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Poppins } from "next/font/google";
 import Script from "next/script";
 import { siteConfig } from "@/lib/site-config";
+import { CartProvider } from "@/lib/cart-context";
 import "./globals.css";
 
 const sans = Inter({
@@ -111,7 +112,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {children}
+        <CartProvider>{children}</CartProvider>
       </body>
     </html>
   );
