@@ -37,8 +37,10 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Todas las rutas excepto archivos estáticos e imágenes optimizadas.
+     * Todas las rutas excepto archivos estáticos, imágenes optimizadas y los
+     * webhooks (los llama Stripe servidor a servidor: no hay sesión que
+     * refrescar y el middleware solo agregaría latencia al reintento).
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/webhooks|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
