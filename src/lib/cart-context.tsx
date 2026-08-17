@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { products } from "@/lib/data";
+import { findCatalogItem } from "@/lib/data";
 
 export type CartItem = {
   slug: string;
@@ -36,7 +36,7 @@ function readStoredCart(): CartItem[] {
         typeof (item as CartItem).slug === "string" &&
         typeof (item as CartItem).qty === "number" &&
         (item as CartItem).qty > 0 &&
-        products.some((p) => p.slug === (item as CartItem).slug),
+        findCatalogItem((item as CartItem).slug) !== null,
     );
   } catch {
     return [];
@@ -66,14 +66,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items, hydrated]);
 
   const add = (slug: string, qty = 1) => {
+    const entry = findCatalogItem(slug);
+    if (!entry) return;
+    // Un servicio se contrata una sola vez por pedido: no acumula cantidad.
+    const isService = entry.kind === "servicio";
+
     setItems((prev) => {
       const existing = prev.find((item) => item.slug === slug);
       if (existing) {
+        if (isService) return prev;
         return prev.map((item) =>
           item.slug === slug ? { ...item, qty: item.qty + qty } : item,
         );
       }
-      return [...prev, { slug, qty }];
+      return [...prev, { slug, qty: isService ? 1 : qty }];
     });
   };
 
@@ -96,8 +102,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const subtotal = useMemo(
     () =>
       items.reduce((sum, item) => {
-        const product = products.find((p) => p.slug === item.slug);
-        return product ? sum + product.priceFrom * item.qty : sum;
+        const entry = findCatalogItem(item.slug);
+        return entry ? sum + entry.price * item.qty : sum;
       }, 0),
     [items],
   );

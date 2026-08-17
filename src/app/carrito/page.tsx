@@ -9,9 +9,10 @@ import { Container } from "@/components/ui/Container";
 import { Section, SectionHeading } from "@/components/ui/Section";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 import { useCart } from "@/lib/cart-context";
 import { useCheckout } from "@/lib/use-checkout";
-import { products } from "@/lib/data";
+import { findCatalogItem } from "@/lib/data";
 
 const currencyFormatter = new Intl.NumberFormat("es-MX", {
   style: "currency",
@@ -45,54 +46,73 @@ export default function CarritoPage() {
               <div className="grid gap-8 lg:grid-cols-3 lg:items-start">
                 <div className="space-y-4 lg:col-span-2">
                   {items.map((item) => {
-                    const product = products.find((p) => p.slug === item.slug);
-                    if (!product) return null;
+                    const entry = findCatalogItem(item.slug);
+                    if (!entry) return null;
+                    const isService = entry.kind === "servicio";
+
                     return (
                       <Card key={item.slug} className="flex gap-4 p-4 sm:p-5">
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          width={140}
-                          height={105}
-                          className="h-24 w-32 shrink-0 rounded-xl object-cover sm:h-28 sm:w-40"
-                        />
+                        {entry.image ? (
+                          <Image
+                            src={entry.image}
+                            alt={entry.name}
+                            width={140}
+                            height={105}
+                            className="h-24 w-32 shrink-0 rounded-xl object-cover sm:h-28 sm:w-40"
+                          />
+                        ) : (
+                          <div className="flex h-24 w-32 shrink-0 items-center justify-center rounded-xl border border-ink-600 bg-ink-800 text-brand-400 sm:h-28 sm:w-40">
+                            <Icon name={entry.icon ?? "sparkles"} className="h-8 w-8" />
+                          </div>
+                        )}
                         <div className="flex flex-1 flex-col justify-between">
                           <div>
-                            <p className="font-semibold text-mist-100">{product.name}</p>
-                            <p className="mt-1 text-sm text-mist-500">{product.category}</p>
+                            <p className="font-semibold text-mist-100">{entry.name}</p>
+                            <p className="mt-1 text-sm text-mist-500">
+                              {entry.category}
+                              {isService ? " · mano de obra" : null}
+                            </p>
                             <p className="mt-1 text-sm font-semibold text-brand-400">
-                              {currencyFormatter.format(product.priceFrom)}
+                              {currencyFormatter.format(entry.price)}
                             </p>
                           </div>
                           <div className="mt-3 flex items-center gap-2">
-                            <button
-                              type="button"
-                              onClick={() => updateQty(item.slug, item.qty - 1)}
-                              aria-label="Disminuir cantidad"
-                              className="rounded-full border border-ink-600 p-1.5 hover:border-brand-500"
-                            >
-                              <Minus className="h-4 w-4" />
-                            </button>
-                            <span className="w-8 text-center text-sm font-medium">
-                              {item.qty}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => updateQty(item.slug, item.qty + 1)}
-                              aria-label="Aumentar cantidad"
-                              disabled={item.qty >= 20}
-                              className="rounded-full border border-ink-600 p-1.5 hover:border-brand-500 disabled:pointer-events-none disabled:opacity-50"
-                            >
-                              <Plus className="h-4 w-4" />
-                            </button>
+                            {isService ? (
+                              <span className="text-sm text-mist-500">
+                                Se contrata una vez
+                              </span>
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => updateQty(item.slug, item.qty - 1)}
+                                  aria-label="Disminuir cantidad"
+                                  className="rounded-full border border-ink-600 p-1.5 hover:border-brand-500"
+                                >
+                                  <Minus className="h-4 w-4" />
+                                </button>
+                                <span className="w-8 text-center text-sm font-medium">
+                                  {item.qty}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => updateQty(item.slug, item.qty + 1)}
+                                  aria-label="Aumentar cantidad"
+                                  disabled={item.qty >= 20}
+                                  className="rounded-full border border-ink-600 p-1.5 hover:border-brand-500 disabled:pointer-events-none disabled:opacity-50"
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </button>
+                              </>
+                            )}
                             <button
                               type="button"
                               onClick={() => remove(item.slug)}
-                              aria-label="Eliminar producto"
+                              aria-label={isService ? "Quitar servicio" : "Eliminar producto"}
                               className="ml-auto flex items-center gap-1.5 rounded-full px-2 py-1.5 text-sm text-mist-500 hover:text-red-400"
                             >
                               <Trash2 className="h-4 w-4" />
-                              Eliminar
+                              Quitar
                             </button>
                           </div>
                         </div>

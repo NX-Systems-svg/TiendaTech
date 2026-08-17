@@ -6,9 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { X, Minus, Plus, Trash2, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 import { useCart } from "@/lib/cart-context";
 import { useCheckout } from "@/lib/use-checkout";
-import { products } from "@/lib/data";
+import { findCatalogItem } from "@/lib/data";
 
 const currencyFormatter = new Intl.NumberFormat("es-MX", {
   style: "currency",
@@ -86,48 +87,67 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
             <>
               <div className="space-y-3">
                 {items.map((item) => {
-                  const product = products.find((p) => p.slug === item.slug);
-                  if (!product) return null;
+                  const entry = findCatalogItem(item.slug);
+                  if (!entry) return null;
+                  const isService = entry.kind === "servicio";
+
                   return (
                     <div
                       key={item.slug}
                       className="flex gap-3 rounded-xl border border-ink-700 bg-ink-850/60 p-3"
                     >
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        width={72}
-                        height={72}
-                        className="h-18 w-18 shrink-0 rounded-lg object-cover"
-                      />
+                      {entry.image ? (
+                        <Image
+                          src={entry.image}
+                          alt={entry.name}
+                          width={72}
+                          height={72}
+                          className="h-18 w-18 shrink-0 rounded-lg object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-18 w-18 shrink-0 items-center justify-center rounded-lg border border-ink-600 bg-ink-800 text-brand-400">
+                          <Icon name={entry.icon ?? "sparkles"} />
+                        </div>
+                      )}
                       <div className="flex flex-1 flex-col gap-1">
-                        <p className="text-sm font-semibold text-mist-100">{product.name}</p>
+                        <p className="text-sm font-semibold text-mist-100">{entry.name}</p>
                         <p className="text-xs text-brand-400">
-                          {currencyFormatter.format(product.priceFrom)}
+                          {currencyFormatter.format(entry.price)}
+                          {isService ? (
+                            <span className="text-mist-500"> · mano de obra</span>
+                          ) : null}
                         </p>
                         <div className="mt-1 flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => updateQty(item.slug, item.qty - 1)}
-                            aria-label="Disminuir cantidad"
-                            className="rounded-full border border-ink-600 p-1 transition-colors hover:border-brand-500"
-                          >
-                            <Minus className="h-3.5 w-3.5" />
-                          </button>
-                          <span className="w-6 text-center text-sm font-medium">{item.qty}</span>
-                          <button
-                            type="button"
-                            onClick={() => updateQty(item.slug, item.qty + 1)}
-                            aria-label="Aumentar cantidad"
-                            disabled={item.qty >= 20}
-                            className="rounded-full border border-ink-600 p-1 transition-colors hover:border-brand-500 disabled:pointer-events-none disabled:opacity-50"
-                          >
-                            <Plus className="h-3.5 w-3.5" />
-                          </button>
+                          {isService ? (
+                            <span className="text-xs text-mist-500">Servicio único</span>
+                          ) : (
+                            <>
+                              <button
+                                type="button"
+                                onClick={() => updateQty(item.slug, item.qty - 1)}
+                                aria-label="Disminuir cantidad"
+                                className="rounded-full border border-ink-600 p-1 transition-colors hover:border-brand-500"
+                              >
+                                <Minus className="h-3.5 w-3.5" />
+                              </button>
+                              <span className="w-6 text-center text-sm font-medium">
+                                {item.qty}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => updateQty(item.slug, item.qty + 1)}
+                                aria-label="Aumentar cantidad"
+                                disabled={item.qty >= 20}
+                                className="rounded-full border border-ink-600 p-1 transition-colors hover:border-brand-500 disabled:pointer-events-none disabled:opacity-50"
+                              >
+                                <Plus className="h-3.5 w-3.5" />
+                              </button>
+                            </>
+                          )}
                           <button
                             type="button"
                             onClick={() => remove(item.slug)}
-                            aria-label="Eliminar producto"
+                            aria-label={isService ? "Quitar servicio" : "Eliminar producto"}
                             className="ml-auto rounded-full p-1 text-mist-500 transition-colors hover:text-red-400"
                           >
                             <Trash2 className="h-4 w-4" />

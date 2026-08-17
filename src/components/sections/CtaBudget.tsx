@@ -18,7 +18,8 @@ export function CtaBudget() {
               Presupuesto <span className="text-brand-500">abierto</span>
             </p>
             <p className="mt-1 text-sm text-mist-500 sm:text-base">
-              Te damos la mejor solución al mejor precio. ¡Tu equipo en las mejores manos!
+              Mano de obra a precio fijo y refacciones cotizadas a tu medida. ¡Tu
+              equipo en las mejores manos!
             </p>
           </div>
         </div>

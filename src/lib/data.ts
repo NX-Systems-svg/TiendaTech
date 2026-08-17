@@ -29,7 +29,21 @@ export const benefits = [
   },
 ] as const;
 
-export const services = [
+export type Service = {
+  slug: string;
+  title: string;
+  highlight: string;
+  description: string;
+  icon: string;
+  /**
+   * Precio fijo de mano de obra en MXN. Un servicio SIN precio depende de las
+   * refacciones que elija el cliente: no se puede cobrar por adelantado, así
+   * que solo se ofrece por cotización y nunca llega al carrito.
+   */
+  price?: number;
+};
+
+export const services: Service[] = [
   {
     slug: "mantenimiento-preventivo",
     title: "Mantenimiento",
@@ -37,6 +51,7 @@ export const services = [
     description:
       "Limpieza interna y externa, revisión de componentes y optimización.",
     icon: "sparkles",
+    price: 350,
   },
   {
     slug: "cambio-de-ssd",
@@ -60,6 +75,7 @@ export const services = [
     description:
       "Instalamos Windows (10/11) y otros sistemas operativos de forma segura y eficiente.",
     icon: "monitor",
+    price: 400,
   },
   {
     slug: "paqueteria-de-office",
@@ -68,6 +84,7 @@ export const services = [
     description:
       "Instalación de Microsoft Office (Word, Excel, PowerPoint, Outlook y más).",
     icon: "briefcase",
+    price: 300,
   },
   {
     slug: "revision-y-diagnostico",
@@ -75,8 +92,9 @@ export const services = [
     highlight: "Diagnóstico",
     description: "Detectamos y solucionamos fallas de hardware y software.",
     icon: "search",
+    price: 150,
   },
-] as const;
+];
 
 export const trustBadges = [
   {
@@ -157,6 +175,57 @@ export const products: Product[] = [
     image: "https://placehold.co/600x450/0d1220/8a93b3/png?text=Windows+11+Pro",
   },
 ];
+
+/**
+ * Elemento normalizado del carrito: unifica productos y servicios para que el
+ * carrito, el resumen y el checkout no tengan que saber de cuál lista viene.
+ */
+export type CatalogItem = {
+  slug: string;
+  name: string;
+  price: number;
+  category: string;
+  kind: "producto" | "servicio";
+  /** Solo los productos tienen foto; los servicios se muestran con su ícono. */
+  image?: string;
+  icon?: string;
+};
+
+/**
+ * Busca un slug en el catálogo. Es la única fuente de precios: tanto el
+ * cliente como el servidor resuelven aquí, nunca confiando en un precio
+ * enviado en la petición.
+ *
+ * Devuelve null para servicios sin precio fijo (solo cotización), de modo que
+ * nunca puedan cobrarse aunque alguien los meta a mano en la petición.
+ */
+export function findCatalogItem(slug: string): CatalogItem | null {
+  const product = products.find((p) => p.slug === slug);
+  if (product) {
+    return {
+      slug: product.slug,
+      name: product.name,
+      price: product.priceFrom,
+      category: product.category,
+      kind: "producto",
+      image: product.image,
+    };
+  }
+
+  const service = services.find((s) => s.slug === slug);
+  if (service && typeof service.price === "number") {
+    return {
+      slug: service.slug,
+      name: `${service.title} ${service.highlight}`,
+      price: service.price,
+      category: "Servicio",
+      kind: "servicio",
+      icon: service.icon,
+    };
+  }
+
+  return null;
+}
 
 export const guides = [
   {
