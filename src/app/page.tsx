@@ -2,6 +2,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { Services } from "@/components/sections/Services";
+import { Guides } from "@/components/sections/Guides";
 import { ProductCatalog } from "@/components/sections/ProductCatalog";
 import { CtaBudget } from "@/components/sections/CtaBudget";
 import { TrustBadges } from "@/components/sections/TrustBadges";
@@ -14,6 +15,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <Services />
+        <Guides />
         <ProductCatalog />
         <CtaBudget />
         <Contact />

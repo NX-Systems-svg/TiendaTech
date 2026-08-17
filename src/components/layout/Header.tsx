@@ -21,11 +21,11 @@ export function Header() {
       <Container className="flex h-18 items-center justify-between py-3">
         <Link href="/" className="flex items-center gap-3" aria-label={siteConfig.name}>
           <Image
-            src="https://placehold.co/96x96/0d1220/ff7a1a/png?text=GT"
+            src="/logo.png"
             alt={`Logo de ${siteConfig.name}`}
             width={44}
             height={44}
-            className="rounded-full"
+            className="object-contain"
             priority
           />
           <span className="font-display text-lg font-extrabold tracking-tight text-mist-100">

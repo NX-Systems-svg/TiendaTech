@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { X, Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useCart } from "@/lib/cart-context";
+import { useCheckout } from "@/lib/use-checkout";
 import { products } from "@/lib/data";
 
 const currencyFormatter = new Intl.NumberFormat("es-MX", {
@@ -15,40 +16,9 @@ const currencyFormatter = new Intl.NumberFormat("es-MX", {
 
 export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { items, updateQty, remove, subtotal } = useCart();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { loading, error, checkout } = useCheckout();
 
   if (!open) return null;
-
-  const handleCheckout = async () => {
-    setError(null);
-    setLoading(true);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          items: items.map((item) => ({ slug: item.slug, qty: item.qty })),
-        }),
-      });
-
-      if (!res.ok) {
-        setError("No pudimos iniciar el pago. Intenta de nuevo en un momento.");
-        return;
-      }
-
-      const data: { url?: string } = await res.json();
-      if (typeof data.url === "string") {
-        window.location.href = data.url;
-      } else {
-        setError("No pudimos iniciar el pago. Intenta de nuevo en un momento.");
-      }
-    } catch {
-      setError("No pudimos conectar con el servidor de pagos.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="fixed inset-0 z-[60] flex justify-end">
@@ -74,6 +44,16 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
         {items.length === 0 ? (
           <p className="mt-8 text-sm text-mist-500">Tu carrito está vacío.</p>
         ) : (
+          <Link
+            href="/carrito"
+            onClick={onClose}
+            className="mt-4 text-xs font-semibold text-brand-400 hover:text-brand-300"
+          >
+            Ver carrito completo →
+          </Link>
+        )}
+
+        {items.length > 0 && (
           <div className="mt-6 flex-1 space-y-4">
             {items.map((item) => {
               const product = products.find((p) => p.slug === item.slug);
@@ -134,7 +114,7 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
           </div>
           {error ? <p className="mb-3 text-xs text-red-400">{error}</p> : null}
           <Button
-            onClick={handleCheckout}
+            onClick={checkout}
             disabled={items.length === 0 || loading}
             className="w-full"
           >

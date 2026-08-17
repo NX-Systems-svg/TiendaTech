@@ -1,6 +1,7 @@
 export const navLinks = [
   { href: "#servicios", label: "Servicios" },
   { href: "#productos", label: "Productos" },
+  { href: "#guias", label: "Guías" },
   { href: "#nosotros", label: "Nosotros" },
   { href: "#contacto", label: "Contacto" },
 ];
@@ -156,3 +157,54 @@ export const products: Product[] = [
     image: "https://placehold.co/600x450/0d1220/8a93b3/png?text=Windows+11+Pro",
   },
 ];
+
+export const guides = [
+  {
+    slug: "ssd-vs-hdd",
+    title: "SSD vs HDD:",
+    highlight: "¿cuál necesita tu equipo?",
+    description:
+      "Un SSD arranca y abre programas hasta 10 veces más rápido que un disco duro tradicional. Te explicamos cuándo vale la pena el cambio.",
+    icon: "chip",
+  },
+  {
+    slug: "cuanta-ram-necesito",
+    title: "¿Cuánta RAM",
+    highlight: "es suficiente?",
+    description:
+      "8GB, 16GB, 32GB... la cantidad correcta depende de lo que haces con tu equipo. Te ayudamos a elegir sin gastar de más.",
+    icon: "memory",
+  },
+  {
+    slug: "senales-mantenimiento",
+    title: "Señales de que tu PC",
+    highlight: "necesita mantenimiento",
+    description:
+      "Ruidos extraños, sobrecalentamiento, lentitud repentina. Aprende a detectar los focos rojos antes de que se conviertan en una falla grave.",
+    icon: "thermometer",
+  },
+  {
+    slug: "windows-10-vs-11",
+    title: "Windows 10 vs 11:",
+    highlight: "¿cuándo actualizar?",
+    description:
+      "El soporte de Windows 10 tiene fecha límite. Te contamos qué considerar antes de dar el salto a Windows 11.",
+    icon: "monitor",
+  },
+  {
+    slug: "vida-util-laptop",
+    title: "Cómo alargar la",
+    highlight: "vida útil de tu laptop",
+    description:
+      "Limpieza, ventilación y buenos hábitos de carga pueden sumarle años a tu equipo. Consejos simples que sí funcionan.",
+    icon: "shield-check",
+  },
+  {
+    slug: "hardware-o-software",
+    title: "¿Falla de hardware",
+    highlight: "o de software?",
+    description:
+      "No toda falla requiere cambiar piezas. Te enseñamos a distinguir entre un problema de software y uno físico antes de gastar de más.",
+    icon: "search",
+  },
+] as const;
