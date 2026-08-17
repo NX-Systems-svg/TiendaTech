@@ -12,8 +12,8 @@ export const siteConfig = {
     email: "garduno.tech@gmail.com",
   },
   social: {
-    facebook: "https://facebook.com/Garduñotech",
-    instagram: "https://instagram.com/Garduñotech",
-    tiktok: "https://tiktok.com/@Garduñotech",
+    facebook: "https://www.facebook.com/profile.php?id=61591920626241",
+    instagram: "https://www.instagram.com/garduno.tech/",
+    tiktok: "https://www.tiktok.com/@gardunotech",
   },
 } as const;

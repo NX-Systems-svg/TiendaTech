@@ -4,6 +4,7 @@ import { useId, useState, type FormEvent } from "react";
 import { Loader2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { quoteRequestSchema } from "@/lib/validations/quote";
+import { useQuote } from "@/lib/quote-context";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -12,8 +13,13 @@ const inputClasses =
 
 export function ContactForm() {
   const formId = useId();
+  const { request } = useQuote();
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Record<string, string[]>>({});
+
+  // Cuando llega una solicitud desde el catálogo, `request.id` cambia y la
+  // `key` remonta estos campos con los valores ya rellenados.
+  const prefillKey = request?.id ?? 0;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -102,9 +108,10 @@ export function ContactForm() {
           Me interesa
         </label>
         <select
+          key={`interest-${prefillKey}`}
           id={`${formId}-interest`}
           name="interest"
-          defaultValue="servicio"
+          defaultValue={request ? "producto" : "servicio"}
           className={inputClasses}
         >
           <option value="servicio">Un servicio de mantenimiento</option>
@@ -118,9 +125,14 @@ export function ContactForm() {
           Cuéntanos qué necesitas
         </label>
         <textarea
+          key={`message-${prefillKey}`}
           id={`${formId}-message`}
           name="message"
           rows={4}
+          defaultValue={
+            request ? `Hola, me interesa cotizar: ${request.product}. ` : ""
+          }
+          placeholder="Cuéntanos qué equipo tienes y qué necesitas."
           className={inputClasses}
         />
         {errors.message ? <p className="text-xs text-brand-400">{errors.message[0]}</p> : null}

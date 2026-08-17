@@ -9,6 +9,7 @@ import { Card, Badge } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { products } from "@/lib/data";
 import { useCart } from "@/lib/cart-context";
+import { useQuote } from "@/lib/quote-context";
 
 const currencyFormatter = new Intl.NumberFormat("es-MX", {
   style: "currency",
@@ -18,6 +19,7 @@ const currencyFormatter = new Intl.NumberFormat("es-MX", {
 
 export function ProductCatalog() {
   const { add } = useCart();
+  const { requestQuote } = useQuote();
   const [justAdded, setJustAdded] = useState<string | null>(null);
 
   const handleAdd = (slug: string) => {
@@ -80,7 +82,7 @@ export function ProductCatalog() {
                     )}
                   </Button>
                   <Button
-                    href={`#contacto?producto=${encodeURIComponent(product.name)}`}
+                    onClick={() => requestQuote(product.name)}
                     variant="ghost"
                     className="w-full !py-2 text-sm text-mist-500 hover:text-brand-400"
                   >
