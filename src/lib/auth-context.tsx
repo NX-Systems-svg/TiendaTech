@@ -16,6 +16,8 @@ type AuthContextValue = {
   user: User | null;
   /** false mientras aún no sabemos si hay sesión (evita parpadeos en el botón). */
   ready: boolean;
+  /** false si el sitio todavía no tiene configurada la conexión a Supabase. */
+  isConfigured: boolean;
   signInWithGoogle: () => Promise<void>;
 };
 
@@ -27,6 +29,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    // Sin conexión configurada no hay sesión posible: se marca como resuelto
+    // para que la interfaz no se quede esperando para siempre.
+    if (!supabase) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setReady(true);
+      return;
+    }
+
     let active = true;
 
     supabase.auth.getUser().then(({ data }) => {
@@ -49,6 +59,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [supabase]);
 
   const signInWithGoogle = useCallback(async () => {
+    if (!supabase) return;
+
     // Volvemos a la página actual tras iniciar sesión, para no perder el
     // contexto (por ejemplo, si estaba en /carrito a punto de pagar).
     const next = `${window.location.pathname}${window.location.search}`;
@@ -61,7 +73,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [supabase]);
 
   return (
-    <AuthContext.Provider value={{ user, ready, signInWithGoogle }}>
+    <AuthContext.Provider
+      value={{ user, ready, signInWithGoogle, isConfigured: Boolean(supabase) }}
+    >
       {children}
     </AuthContext.Provider>
   );

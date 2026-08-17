@@ -6,11 +6,17 @@ import { cookies } from "next/headers";
  * Lee y escribe la sesión en cookies.
  */
 export async function createClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  // Sin configuración no hay sesiones, pero el sitio debe seguir sirviendo.
+  if (!url || !key) return null;
+
   const cookieStore = await cookies();
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    key,
     {
       cookies: {
         getAll() {

@@ -19,6 +19,11 @@ export async function GET(request: Request) {
   }
 
   const supabase = await createClient();
+
+  if (!supabase) {
+    return NextResponse.redirect(`${siteConfig.url}/?auth_error=1`);
+  }
+
   const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {

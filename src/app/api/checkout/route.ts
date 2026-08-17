@@ -9,6 +9,15 @@ export async function POST(request: Request) {
   // Se exige sesión para pagar. Esta es la verificación real: la del carrito
   // es solo de interfaz y cualquiera puede saltársela con una petición directa.
   const supabase = await createClient();
+
+  if (!supabase) {
+    console.error("[checkout] Supabase no está configurado: no se puede validar la sesión");
+    return NextResponse.json(
+      { error: "El inicio de sesión no está disponible por ahora." },
+      { status: 503 },
+    );
+  }
+
   const {
     data: { user },
   } = await supabase.auth.getUser();

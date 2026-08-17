@@ -8,6 +8,6 @@ import { siteConfig } from "@/lib/site-config";
  */
 export async function POST() {
   const supabase = await createClient();
-  await supabase.auth.signOut();
+  if (supabase) await supabase.auth.signOut();
   return NextResponse.redirect(siteConfig.url, { status: 303 });
 }
