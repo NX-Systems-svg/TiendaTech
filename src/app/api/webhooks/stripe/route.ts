@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
+import { waitUntil } from "@vercel/functions";
 import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendSaleNotification, type OrderLine } from "@/lib/mailer";
+
+/**
+ * Margen de sobra para guardar el pedido. El correo ya no cuenta aquí: se
+ * manda en segundo plano.
+ */
+export const maxDuration = 30;
 
 /**
  * Recibe los avisos de pago de Stripe.
@@ -81,17 +88,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No se pudo guardar el pedido." }, { status: 500 });
     }
 
-    // El correo va después de guardar: si falla, el pedido ya está a salvo.
-    const mail = await sendSaleNotification({
+    // El correo sale en segundo plano: enviarlo tarda ~20s por el SMTP de
+    // Gmail, y si Stripe no recibe respuesta a tiempo da el aviso por fallido
+    // y lo reintenta, lo que acabaría mandando el mismo correo varias veces.
+    // El pedido ya quedó guardado, así que un fallo de correo no pierde nada.
+    const notify = sendSaleNotification({
       email: session.customer_email ?? session.customer_details?.email ?? null,
       amountTotal: session.amount_total ?? 0,
       lines,
       sessionId: session.id,
+    }).then((mail) => {
+      if (!mail.sent) {
+        console.warn("[webhook] Pedido guardado, aviso por correo no enviado:", mail.reason);
+      }
     });
 
-    if (!mail.sent) {
-      console.warn("[webhook] Pedido guardado, aviso por correo no enviado:", mail.reason);
-    }
+    waitUntil(notify);
 
     return NextResponse.json({ received: true });
   } catch (error) {

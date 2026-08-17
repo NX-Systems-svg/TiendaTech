@@ -1,19 +1,25 @@
 import nodemailer from "nodemailer";
 import { siteConfig } from "@/lib/site-config";
 
+/** Cuenta que envía. Debe ser la misma con la que se generó GMAIL_APP_PASSWORD. */
+const senderAddress = process.env.GMAIL_USER ?? siteConfig.contact.email;
+
+/** A dónde llega el aviso. Puede ser distinta de la cuenta que envía. */
+const notifyAddress = process.env.NOTIFY_EMAIL ?? siteConfig.contact.email;
+
 /**
- * Envía correos con la cuenta de Gmail del negocio.
- * Requiere una "contraseña de aplicación" de Google (no la contraseña normal).
+ * Envía correos con una cuenta de Gmail.
+ * Requiere una "contraseña de aplicación" de Google (no la contraseña normal),
+ * generada con la misma cuenta que aparece en GMAIL_USER.
  */
 function createTransport() {
-  const user = process.env.GMAIL_USER ?? siteConfig.contact.email;
   const pass = process.env.GMAIL_APP_PASSWORD;
 
   if (!pass) return null;
 
   return nodemailer.createTransport({
     service: "gmail",
-    auth: { user, pass },
+    auth: { user: senderAddress, pass },
   });
 }
 
@@ -50,12 +56,10 @@ export async function sendSaleNotification(params: {
     .map((line) => `<li>${line.quantity} × ${line.name} — ${money(line.amount)}</li>`)
     .join("");
 
-  const to = process.env.GMAIL_USER ?? siteConfig.contact.email;
-
   try {
     await transport.sendMail({
-      from: `"${siteConfig.name}" <${to}>`,
-      to,
+      from: `"${siteConfig.name}" <${senderAddress}>`,
+      to: notifyAddress,
       subject: `Nueva venta: ${money(params.amountTotal)}`,
       html: `
         <h2>Recibiste un pago</h2>
