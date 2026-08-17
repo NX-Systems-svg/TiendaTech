@@ -22,7 +22,7 @@ const currencyFormatter = new Intl.NumberFormat("es-MX", {
 
 export default function CarritoPage() {
   const { items, updateQty, remove, subtotal } = useCart();
-  const { loading, error, checkout } = useCheckout();
+  const { loading, error, checkout, isSignedIn } = useCheckout();
 
   return (
     <>
@@ -142,12 +142,21 @@ export default function CarritoPage() {
                     Costo final y tiempo de entrega se confirman antes de cualquier pago.
                   </p>
                   {error ? <p className="mt-3 text-xs text-red-400">{error}</p> : null}
+                  {!isSignedIn ? (
+                    <p className="mt-3 text-xs text-mist-500">
+                      Necesitas iniciar sesión para completar tu compra.
+                    </p>
+                  ) : null}
                   <Button
                     onClick={checkout}
                     disabled={loading}
                     className="mt-5 w-full"
                   >
-                    {loading ? "Redirigiendo…" : "Pagar con Stripe"}
+                    {loading
+                      ? "Redirigiendo…"
+                      : isSignedIn
+                        ? "Pagar con Stripe"
+                        : "Inicia sesión para pagar"}
                   </Button>
                 </Card>
               </div>

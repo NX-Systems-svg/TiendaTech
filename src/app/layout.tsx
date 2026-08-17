@@ -4,6 +4,7 @@ import Script from "next/script";
 import { siteConfig } from "@/lib/site-config";
 import { CartProvider } from "@/lib/cart-context";
 import { QuoteProvider } from "@/lib/quote-context";
+import { AuthProvider } from "@/lib/auth-context";
 import "./globals.css";
 
 const sans = Inter({
@@ -113,9 +114,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <CartProvider>
-          <QuoteProvider>{children}</QuoteProvider>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <QuoteProvider>{children}</QuoteProvider>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

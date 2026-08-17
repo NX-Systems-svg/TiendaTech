@@ -94,6 +94,14 @@ export const services: Service[] = [
     icon: "search",
     price: 150,
   },
+  {
+    slug: "paginas-web-estaticas",
+    title: "Creación de",
+    highlight: "Páginas Web",
+    description:
+      "Sitios estáticos modernos, rápidos y seguros: 100% responsivos, código limpio y fáciles de mantener.",
+    icon: "globe",
+  },
 ];
 
 export const trustBadges = [

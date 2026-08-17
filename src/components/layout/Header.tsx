@@ -10,6 +10,7 @@ import { navLinks } from "@/lib/data";
 import { siteConfig } from "@/lib/site-config";
 import { CartButton } from "@/components/cart/CartButton";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { AuthButton } from "@/components/auth/AuthButton";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -45,7 +46,8 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-3 md:flex">
+          <AuthButton />
           <Button href={whatsappHref} className="!py-2.5 !px-5 text-sm">
             Cotizar por WhatsApp
           </Button>
@@ -78,6 +80,7 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
+            <AuthButton className="mt-2 w-full justify-center" />
             <Button href={whatsappHref} className="mt-2 w-full">
               Cotizar por WhatsApp
             </Button>

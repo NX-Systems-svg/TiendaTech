@@ -2,13 +2,21 @@
 
 import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
+import { useAuth } from "@/lib/auth-context";
 
 export function useCheckout() {
   const { items } = useCart();
+  const { user, signInWithGoogle } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const checkout = async () => {
+    // Sin sesión no se puede pagar: en vez de fallar, lo mandamos a entrar.
+    if (!user) {
+      await signInWithGoogle();
+      return;
+    }
+
     setError(null);
     setLoading(true);
     try {
@@ -19,6 +27,11 @@ export function useCheckout() {
           items: items.map((item) => ({ slug: item.slug, qty: item.qty })),
         }),
       });
+
+      if (res.status === 401) {
+        setError("Tu sesión expiró. Inicia sesión de nuevo para pagar.");
+        return;
+      }
 
       if (!res.ok) {
         setError("No pudimos iniciar el pago. Intenta de nuevo en un momento.");
@@ -38,5 +51,5 @@ export function useCheckout() {
     }
   };
 
-  return { loading, error, checkout };
+  return { loading, error, checkout, isSignedIn: Boolean(user) };
 }

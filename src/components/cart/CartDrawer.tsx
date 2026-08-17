@@ -19,7 +19,7 @@ const currencyFormatter = new Intl.NumberFormat("es-MX", {
 
 export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { items, updateQty, remove, subtotal, itemCount } = useCart();
-  const { loading, error, checkout } = useCheckout();
+  const { loading, error, checkout, isSignedIn } = useCheckout();
 
   // Mientras el panel está abierto: cerrar con Escape y bloquear el scroll
   // del fondo para que solo se desplace el contenido del carrito.
@@ -177,7 +177,11 @@ export function CartDrawer({ open, onClose }: { open: boolean; onClose: () => vo
           </div>
           {error ? <p className="mb-3 text-xs text-red-400">{error}</p> : null}
           <Button onClick={checkout} disabled={items.length === 0 || loading} className="w-full">
-            {loading ? "Redirigiendo…" : "Pagar con Stripe"}
+            {loading
+              ? "Redirigiendo…"
+              : isSignedIn
+                ? "Pagar con Stripe"
+                : "Inicia sesión para pagar"}
           </Button>
         </div>
       </div>

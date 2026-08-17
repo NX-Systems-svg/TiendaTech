@@ -13,6 +13,7 @@ import {
   Timer,
   Shield,
   LifeBuoy,
+  Globe,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
@@ -32,6 +33,7 @@ const icons: Record<string, LucideIcon> = {
   timer: Timer,
   shield: Shield,
   lifebuoy: LifeBuoy,
+  globe: Globe,
 };
 
 export function Icon({

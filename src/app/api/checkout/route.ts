@@ -3,8 +3,23 @@ import { stripe } from "@/lib/stripe";
 import { cartCheckoutSchema } from "@/lib/validations/cart";
 import { findCatalogItem } from "@/lib/data";
 import { siteConfig } from "@/lib/site-config";
+import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
+  // Se exige sesión para pagar. Esta es la verificación real: la del carrito
+  // es solo de interfaz y cualquiera puede saltársela con una petición directa.
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json(
+      { error: "Inicia sesión para completar tu compra." },
+      { status: 401 },
+    );
+  }
+
   let body: unknown;
 
   try {
@@ -58,6 +73,10 @@ export async function POST(request: Request) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items: lineItems,
+      // Liga el pago a la cuenta que lo hizo: es lo que después alimenta el
+      // aviso de pago y el panel de administración.
+      customer_email: user.email,
+      metadata: { user_id: user.id },
       success_url: `${siteConfig.url}/checkout/exito`,
       cancel_url: `${siteConfig.url}/checkout/cancelado`,
     });
