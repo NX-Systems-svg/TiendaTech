@@ -41,6 +41,12 @@ export type Service = {
    * que solo se ofrece por cotización y nunca llega al carrito.
    */
   price?: number;
+  /**
+   * Texto que sustituye al precio en los servicios que solo van por
+   * cotización. Sin esto todos decían "sujeto a piezas disponibles", que no
+   * tiene sentido en un servicio donde no hay refacciones (páginas web).
+   */
+  quoteNote?: string;
 };
 
 export const services: Service[] = [
@@ -101,6 +107,7 @@ export const services: Service[] = [
     description:
       "Sitios estáticos modernos, rápidos y seguros: 100% responsivos, código limpio y fáciles de mantener.",
     icon: "globe",
+    quoteNote: "Presupuesto abierto según tu proyecto",
   },
 ];
 
@@ -145,42 +152,42 @@ export const products: Product[] = [
     name: "Laptop oficina Core i5",
     category: "Laptops",
     priceFrom: 9999,
-    image: "https://placehold.co/600x450/0d1220/8a93b3/png?text=Laptop+i5",
+    image: "/catalogo/laptop-oficina-i5.png",
   },
   {
     slug: "pc-escritorio-ryzen-5",
     name: "PC de escritorio Ryzen 5",
     category: "Escritorio",
     priceFrom: 12999,
-    image: "https://placehold.co/600x450/0d1220/8a93b3/png?text=PC+Ryzen+5",
+    image: "/catalogo/pc-escritorio-ryzen-5.png",
   },
   {
     slug: "ssd-nvme-1tb",
     name: "SSD NVMe 1TB",
     category: "Almacenamiento",
     priceFrom: 1299,
-    image: "https://placehold.co/600x450/0d1220/8a93b3/png?text=SSD+NVMe+1TB",
+    image: "/catalogo/ssd-nvme-1tb.png",
   },
   {
     slug: "memoria-ram-16gb",
     name: "Memoria RAM 16GB DDR4",
     category: "Memoria",
     priceFrom: 899,
-    image: "https://placehold.co/600x450/0d1220/8a93b3/png?text=RAM+16GB",
+    image: "/catalogo/memoria-ram-16gb.png",
   },
   {
     slug: "monitor-24-fhd",
     name: 'Monitor 24" Full HD',
     category: "Periféricos",
     priceFrom: 2499,
-    image: "https://placehold.co/600x450/0d1220/8a93b3/png?text=Monitor+24%22",
+    image: "/catalogo/monitor-24-fhd.png",
   },
   {
     slug: "licencia-windows-11",
     name: "Licencia Windows 11 Pro",
     category: "Software",
     priceFrom: 1899,
-    image: "https://placehold.co/600x450/0d1220/8a93b3/png?text=Windows+11+Pro",
+    image: "/catalogo/licencia-windows-11.png",
   },
 ];
 

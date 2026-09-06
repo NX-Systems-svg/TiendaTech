@@ -66,7 +66,7 @@ export function Hero() {
           <div className="absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-br from-brand-500/15 via-transparent to-accent-500/15 blur-2xl" />
           <div className="overflow-hidden rounded-3xl border border-ink-700 elevation-floating">
             <Image
-              src="https://placehold.co/1000x800/0d1220/8a93b3/png?text=Equipo+en+mantenimiento"
+              src="/hero-mantenimiento.png"
               alt="Equipo de cómputo en proceso de mantenimiento"
               width={1000}
               height={800}
