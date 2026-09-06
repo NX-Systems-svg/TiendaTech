@@ -69,7 +69,7 @@ export function Services() {
                     </>
                   ) : (
                     <span className="font-semibold text-mist-300">
-                      Sujeto a piezas disponibles
+                      {service.quoteNote ?? "Sujeto a piezas disponibles"}
                     </span>
                   )}
                 </p>
