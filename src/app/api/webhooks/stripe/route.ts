@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
 import type Stripe from "stripe";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { sendSaleNotification, type OrderLine } from "@/lib/mailer";
 
@@ -19,10 +19,11 @@ export const maxDuration = 30;
  * pierde la conexión.
  */
 export async function POST(request: Request) {
+  const stripe = getStripe();
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  if (!secret) {
-    console.error("[webhook] STRIPE_WEBHOOK_SECRET no está configurada");
+  if (!stripe || !secret) {
+    console.error("[webhook] Faltan STRIPE_SECRET_KEY o STRIPE_WEBHOOK_SECRET");
     return NextResponse.json({ error: "Webhook no configurado." }, { status: 500 });
   }
 

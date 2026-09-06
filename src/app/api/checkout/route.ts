@@ -1,11 +1,21 @@
 import { NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { cartCheckoutSchema } from "@/lib/validations/cart";
 import { findCatalogItem } from "@/lib/data";
 import { siteConfig } from "@/lib/site-config";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
+  const stripe = getStripe();
+
+  if (!stripe) {
+    console.error("[checkout] STRIPE_SECRET_KEY no está configurada");
+    return NextResponse.json(
+      { error: "El pago en línea no está disponible por ahora." },
+      { status: 503 },
+    );
+  }
+
   // Se exige sesión para pagar. Esta es la verificación real: la del carrito
   // es solo de interfaz y cualquiera puede saltársela con una petición directa.
   const supabase = await createClient();
