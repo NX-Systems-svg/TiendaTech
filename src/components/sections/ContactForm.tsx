@@ -9,7 +9,7 @@ import { useQuote } from "@/lib/quote-context";
 type Status = "idle" | "submitting" | "success" | "error";
 
 const inputClasses =
-  "w-full rounded-xl border border-ink-600 bg-ink-900 px-4 py-3 text-sm text-mist-100 placeholder:text-mist-500 transition-colors duration-200 focus:border-brand-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40";
+  "w-full rounded-xl border border-control bg-ink-900 px-4 py-3 text-sm text-mist-100 placeholder:text-mist-500 transition-colors duration-200 focus:border-brand-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/40";
 
 export function ContactForm() {
   const formId = useId();

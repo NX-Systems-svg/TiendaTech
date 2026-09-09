@@ -8,6 +8,9 @@
   --color-ink-700: #1a2036;
   --color-ink-600: #262e4a;
   --color-ink-500: #3a4468;
+  /* Borde de campos y botones: el unico que la norma exige percibir. Los
+     bordes decorativos siguen usando ink-700/ink-600, mas discretos. */
+  --color-control: #566596;
 
   --color-mist-100: #f4f6fb;
   --color-mist-300: #c7cede;
@@ -41,6 +44,7 @@
   --color-ink-700: var(--color-ink-700);
   --color-ink-600: var(--color-ink-600);
   --color-ink-500: var(--color-ink-500);
+  --color-control: var(--color-control);
 
   --color-mist-100: var(--color-mist-100);
   --color-mist-300: var(--color-mist-300);
@@ -127,4 +131,41 @@ h4 {
 
 .text-balance {
   text-wrap: balance;
+}
+
+
+/* Quien pide menos movimiento en su sistema no debe recibir animaciones:
+   se conserva el estado final para que nada quede invisible a medias. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-fade-up {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Enlace de salto: invisible hasta recibir el foco con el teclado. */
+.saltar-al-contenido {
+  position: absolute;
+  left: 50%;
+  top: 0.5rem;
+  z-index: 100;
+  translate: -50% -150%;
+  border-radius: 9999px;
+  background: var(--color-brand-orange-500);
+  color: var(--color-ink-950);
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+}
+
+.saltar-al-contenido:focus {
+  translate: -50% 0;
 }

@@ -31,7 +31,7 @@ export function Services() {
 
         <div className="mb-10 flex items-start gap-3 rounded-2xl border border-ink-700 bg-ink-850/60 p-4 text-sm text-mist-500 sm:items-center">
           <Wrench className="mt-0.5 h-5 w-5 shrink-0 text-brand-400 sm:mt-0" aria-hidden />
-          <p>
+          <p className="leading-relaxed">
             Los precios mostrados son de{" "}
             <span className="font-semibold text-mist-300">mano de obra</span>. Las
             refacciones (SSD, memorias, licencias) se cotizan aparte según lo que

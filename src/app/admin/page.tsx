@@ -89,7 +89,7 @@ export default async function PanelAdmin() {
 
   if (!supabase) {
     return (
-      <main className="py-20">
+      <main id="contenido" className="py-20">
         <Container>
           <AccesoAdmin />
         </Container>
@@ -103,7 +103,7 @@ export default async function PanelAdmin() {
 
   if (!user) {
     return (
-      <main className="py-20">
+      <main id="contenido" className="py-20">
         <Container>
           <AccesoAdmin />
         </Container>
@@ -118,7 +118,7 @@ export default async function PanelAdmin() {
 
   if (!esAdmin) {
     return (
-      <main className="py-20">
+      <main id="contenido" className="py-20">
         <Container>
           <AccesoAdmin correoActual={user.email} />
         </Container>
@@ -148,7 +148,7 @@ export default async function PanelAdmin() {
   const pendientes = cotizaciones.filter((c) => !c.atendida).length;
 
   return (
-    <main className="py-12 sm:py-16">
+    <main id="contenido" className="py-12 sm:py-16">
       <Container className="flex flex-col gap-10">
         <header className="flex flex-col gap-2">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-400">

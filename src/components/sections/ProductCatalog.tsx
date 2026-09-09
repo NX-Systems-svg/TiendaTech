@@ -39,7 +39,7 @@ export function ProductCatalog() {
 
         <div className="mb-10 flex items-start gap-3 rounded-2xl border border-ink-700 bg-ink-850/60 p-4 text-sm text-mist-500 sm:items-center">
           <PackageSearch className="mt-0.5 h-5 w-5 shrink-0 text-brand-400 sm:mt-0" aria-hidden />
-          <p>
+          <p className="leading-relaxed">
             Los precios son de referencia y pueden variar según disponibilidad del
             proveedor. Al confirmar tu pedido te damos costo final y tiempo de entrega
             antes de cualquier pago.

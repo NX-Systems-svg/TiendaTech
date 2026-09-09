@@ -65,7 +65,7 @@ export function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook de Garduño Tech"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-ink-600 text-mist-300 transition-colors duration-200 hover:border-brand-500 hover:text-brand-400"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-control text-mist-300 transition-colors duration-200 hover:border-brand-500 hover:text-brand-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400"
                 >
                   <FacebookIcon className="h-4.5 w-4.5" />
                 </a>
@@ -74,7 +74,7 @@ export function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram de Garduño Tech"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-ink-600 text-mist-300 transition-colors duration-200 hover:border-brand-500 hover:text-brand-400"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-control text-mist-300 transition-colors duration-200 hover:border-brand-500 hover:text-brand-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400"
                 >
                   <InstagramIcon className="h-4.5 w-4.5" />
                 </a>
@@ -83,7 +83,7 @@ export function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="TikTok de Garduño Tech"
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-ink-600 text-mist-300 transition-colors duration-200 hover:border-brand-500 hover:text-brand-400"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-control text-mist-300 transition-colors duration-200 hover:border-brand-500 hover:text-brand-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400"
                 >
                   <TikTokIcon className="h-4.5 w-4.5" />
                 </a>

@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="flex-1">
+      <main id="contenido" className="flex-1">
         <Hero />
         <Services />
         <Guides />

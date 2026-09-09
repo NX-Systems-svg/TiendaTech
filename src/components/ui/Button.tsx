@@ -8,13 +8,13 @@ const variantClasses: Record<Variant, string> = {
   primary:
     "bg-brand-500 text-ink-950 hover:bg-brand-400 active:bg-brand-600 focus-visible:outline-brand-400",
   secondary:
-    "bg-ink-800 text-mist-100 border border-ink-600 hover:border-brand-500 hover:text-brand-400 active:bg-ink-700 focus-visible:outline-brand-400",
+    "bg-ink-800 text-mist-100 border border-control hover:border-brand-500 hover:text-brand-400 active:bg-ink-700 focus-visible:outline-brand-400",
   ghost:
     "bg-transparent text-mist-100 hover:bg-ink-800 active:bg-ink-700 focus-visible:outline-brand-400",
 };
 
 const baseClasses =
-  "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-transform duration-200 ease-out will-change-transform hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-transform duration-200 ease-out will-change-transform hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-50";
 
 export function Button({
   children,

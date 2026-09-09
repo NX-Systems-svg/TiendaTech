@@ -17,7 +17,7 @@ export function CtaBudget() {
             <p className="font-display text-2xl font-black tracking-[-0.03em] text-mist-100">
               Presupuesto <span className="text-brand-500">abierto</span>
             </p>
-            <p className="mt-1 text-sm text-mist-500 sm:text-base">
+            <p className="leading-relaxed mt-1 text-sm text-mist-500 sm:text-base">
               Mano de obra a precio fijo y refacciones cotizadas a tu medida. ¡Tu
               equipo en las mejores manos!
             </p>

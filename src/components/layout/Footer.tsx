@@ -11,19 +11,19 @@ export function Footer() {
           GARDUÑO<span className="text-brand-500"> TECH</span>
         </p>
 
-        <nav className="flex flex-wrap justify-center gap-6">
+        <nav className="flex flex-wrap items-center justify-center gap-x-6">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-mist-500 transition-colors duration-200 hover:text-brand-400"
+              className="inline-flex min-h-11 items-center text-sm text-mist-500 transition-colors duration-200 hover:text-brand-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <p className="text-xs text-mist-500">
+        <p className="leading-relaxed text-xs text-mist-500">
           © {new Date().getFullYear()} {siteConfig.name}. Prevenir hoy, es ahorrar mañana.
         </p>
       </Container>

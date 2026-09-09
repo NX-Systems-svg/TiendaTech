@@ -32,7 +32,7 @@ export function AuthButton({
       <button
         type="button"
         onClick={signInWithGoogle}
-        className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-ink-700 px-4 py-2.5 text-sm font-semibold text-mist-100 transition-colors duration-200 hover:border-brand-500 hover:text-brand-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400 ${className ?? ""}`}
+        className={`inline-flex items-center justify-center min-h-11 gap-2 whitespace-nowrap rounded-full border border-control px-4 py-2.5 text-sm font-semibold text-mist-100 transition-colors duration-200 hover:border-brand-500 hover:text-brand-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400 ${className ?? ""}`}
       >
         <LogIn className="h-4 w-4" aria-hidden />
         Iniciar sesión

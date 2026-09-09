@@ -27,7 +27,7 @@ export default function CarritoPage() {
   return (
     <>
       <Header />
-      <main className="flex-1">
+      <main id="contenido" className="flex-1">
         <Section>
           <Container>
             <SectionHeading

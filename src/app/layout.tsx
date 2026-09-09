@@ -114,6 +114,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <a href="#contenido" className="saltar-al-contenido">
+          Saltar al contenido
+        </a>
+
         <AuthProvider>
           <CartProvider>
             <QuoteProvider>{children}</QuoteProvider>
