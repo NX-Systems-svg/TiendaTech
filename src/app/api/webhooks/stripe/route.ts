@@ -98,9 +98,24 @@ export async function POST(request: Request) {
       amountTotal: session.amount_total ?? 0,
       lines,
       sessionId: session.id,
-    }).then((mail) => {
+    }).then(async (mail) => {
       if (!mail.sent) {
         console.warn("[webhook] Pedido guardado, aviso por correo no enviado:", mail.reason);
+      }
+
+      // Se deja escrito junto al pedido: los registros de Vercel duran una
+      // hora y despues no hay forma de saber por que no llego el aviso.
+      const { error: errorAviso } = await supabase
+        .from("orders")
+        .update({
+          aviso_estado: mail.sent ? "enviado" : "fallido",
+          aviso_detalle: mail.sent ? null : (mail.reason ?? "motivo desconocido"),
+          aviso_en: new Date().toISOString(),
+        })
+        .eq("stripe_session_id", session.id);
+
+      if (errorAviso) {
+        console.error("[webhook] No se pudo registrar el resultado del aviso", errorAviso);
       }
     });
 

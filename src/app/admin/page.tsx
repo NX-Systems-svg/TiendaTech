@@ -27,6 +27,8 @@ const fecha = new Intl.DateTimeFormat("es-MX", {
 type Pedido = {
   id: string;
   email: string | null;
+  aviso_estado: string;
+  aviso_detalle: string | null;
   amount_total: number;
   currency: string;
   status: string;
@@ -129,7 +131,7 @@ export default async function PanelAdmin() {
   const [pedidosRes, cotizacionesRes] = await Promise.all([
     supabase
       .from("orders")
-      .select("id, email, amount_total, currency, status, created_at, items")
+      .select("id, email, amount_total, currency, status, created_at, items, aviso_estado, aviso_detalle")
       .order("created_at", { ascending: false })
       .limit(50),
     supabase
@@ -146,6 +148,7 @@ export default async function PanelAdmin() {
   const ingresos = pedidos.reduce((suma, p) => suma + (p.amount_total ?? 0), 0) / 100;
   const ticket = pedidos.length > 0 ? ingresos / pedidos.length : 0;
   const pendientes = cotizaciones.filter((c) => !c.atendida).length;
+  const sinAvisar = pedidos.filter((p) => p.aviso_estado === "fallido").length;
 
   return (
     <main id="contenido" className="py-12 sm:py-16">
@@ -189,6 +192,18 @@ export default async function PanelAdmin() {
           />
         </section>
 
+        {sinAvisar > 0 ? (
+          <div className="rounded-2xl border border-red-500/40 bg-red-500/10 p-4 text-sm text-mist-100">
+            <strong className="font-semibold">
+              {sinAvisar === 1
+                ? "1 venta no te avisó por correo."
+                : `${sinAvisar} ventas no te avisaron por correo.`}
+            </strong>{" "}
+            El pedido sí quedó registrado. El motivo aparece en la columna
+            &ldquo;Aviso&rdquo;.
+          </div>
+        ) : null}
+
         <section className="flex flex-col gap-4">
           <h2 className="text-xl font-bold text-mist-100">Pedidos</h2>
 
@@ -199,12 +214,13 @@ export default async function PanelAdmin() {
             </Vacio>
           ) : (
             <div className="overflow-x-auto rounded-2xl border border-ink-700">
-              <table className="w-full min-w-[640px] text-left text-sm">
+              <table className="w-full min-w-[760px] text-left text-sm">
                 <thead className="bg-ink-800/60 text-xs uppercase tracking-wide text-mist-500">
                   <tr>
                     <th className="px-4 py-3 font-semibold">Fecha</th>
                     <th className="px-4 py-3 font-semibold">Cliente</th>
                     <th className="px-4 py-3 font-semibold">Artículos</th>
+                    <th className="px-4 py-3 font-semibold">Aviso</th>
                     <th className="px-4 py-3 text-right font-semibold">Total</th>
                   </tr>
                 </thead>
@@ -219,6 +235,25 @@ export default async function PanelAdmin() {
                         {(p.items ?? [])
                           .map((i) => `${i.quantity}× ${i.name}`)
                           .join(", ") || "—"}
+                      </td>
+                      <td className="px-4 py-3">
+                        {p.aviso_estado === "enviado" ? (
+                          <span className="text-mist-500">Enviado</span>
+                        ) : p.aviso_estado === "fallido" ? (
+                          <span
+                            className="font-semibold text-red-400"
+                            title={p.aviso_detalle ?? ""}
+                          >
+                            No se envió
+                            {p.aviso_detalle ? (
+                              <span className="block text-xs font-normal text-mist-500">
+                                {p.aviso_detalle}
+                              </span>
+                            ) : null}
+                          </span>
+                        ) : (
+                          <span className="text-mist-500">—</span>
+                        )}
                       </td>
                       <td className="whitespace-nowrap px-4 py-3 text-right font-semibold text-brand-400">
                         {dinero.format((p.amount_total ?? 0) / 100)}

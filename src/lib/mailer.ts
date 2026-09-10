@@ -72,7 +72,10 @@ export async function sendSaleNotification(params: {
     });
     return { sent: true };
   } catch (error) {
+    // El motivo real importa: "Invalid login" y "Connection timeout" se
+    // arreglan de formas distintas, y con "error al enviar" no se distinguen.
+    const motivo = error instanceof Error ? error.message : String(error);
     console.error("[mailer] No se pudo enviar el aviso de venta", error);
-    return { sent: false, reason: "error al enviar" };
+    return { sent: false, reason: motivo.slice(0, 300) };
   }
 }
